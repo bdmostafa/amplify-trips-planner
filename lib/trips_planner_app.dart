@@ -1,3 +1,4 @@
+import 'package:amplify_trips_planner/features/trip/ui/trip_page/trip_page.dart';
 import 'package:amplify_trips_planner/features/trip/ui/trips_list/trips_list_page.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -30,6 +31,14 @@ class TripsPlannerApp extends StatelessWidget {
                     ),
                   ),
                 ),
+        ),
+        GoRoute(
+          path: '/trip/:id',
+          name: AppRoute.trip.name,
+          builder: (context, state) {
+            final tripId = state.params['id']!;
+            return TripPage(tripId: tripId);
+          },
         ),
       ],
       errorBuilder: (context, state) => Scaffold(
