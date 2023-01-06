@@ -1,7 +1,34 @@
+import 'package:amplify_trips_planner/trips_planner_app.dart';
 import 'package:flutter/material.dart';
+import 'package:amplify_flutter/amplify_flutter.dart';
+import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'amplifyconfiguration.dart';
 
-void main() {
-  runApp(const MyApp());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  bool isAmplifySuccessfullyConfigured = false;
+  try {
+    await _configureAmplify();
+    isAmplifySuccessfullyConfigured = true;
+  } on AmplifyAlreadyConfiguredException {
+    debugPrint('Amplify configuration failed.');
+  }
+
+  runApp(
+    ProviderScope(
+      child: TripsPlannerApp(
+        isAmplifySuccessfullyConfigured: isAmplifySuccessfullyConfigured,
+      ),
+    ),
+  );
+}
+
+Future<void> _configureAmplify() async {
+  await Amplify.addPlugins([
+    AmplifyAuthCognito(),
+  ]);
+  await Amplify.configure(amplifyconfig);
 }
 
 class MyApp extends StatelessWidget {
